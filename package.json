@@ -1,0 +1,40 @@
+{
+  "name": "lark-wechat-collector",
+  "version": "1.0.0",
+  "description": "微信公众号文章智能采集与飞书知识库管理 Skill - 基于飞书CLI",
+  "main": "scripts/wechat-article-extractor.js",
+  "scripts": {
+    "extract": "node scripts/wechat-article-extractor.js",
+    "save": "node scripts/feishu-wiki-saver.js",
+    "search": "node scripts/feishu-wiki-searcher.js",
+    "postinstall": "echo '请确保已安装 lark-cli: npm install -g @larksuite/cli && lark-cli auth login --recommend'"
+  },
+  "keywords": [
+    "feishu",
+    "lark",
+    "wechat",
+    "cli",
+    "skill",
+    "knowledge-base",
+    "article-collector",
+    "ai-agent"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "playwright": "^1.59.1",
+    "puppeteer": "^24.41.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/feishu-wechat-collector.git"
+  },
+  "files": [
+    "skills/",
+    "scripts/"
+  ]
+}

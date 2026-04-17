@@ -250,21 +250,21 @@ const { chromium } = require('playwright');
             markdown += '\\n#### ' + child.textContent.trim() + '\\n\\n';
             break;
           case 'p':
-            markdown += child.textContent.trim() + '\\n\\n';
+            markdown += htmlToMarkdown(child) + '\\n\\n';
             break;
           case 'br':
             markdown += '\\n';
             break;
           case 'strong':
           case 'b':
-            markdown += '**' + child.textContent.trim() + '**';
+            markdown += '**' + htmlToMarkdown(child) + '**';
             break;
           case 'em':
           case 'i':
-            markdown += '*' + child.textContent.trim() + '*';
+            markdown += '*' + htmlToMarkdown(child) + '*';
             break;
           case 'blockquote':
-            markdown += '\\n> ' + child.textContent.trim().replace(/\\n/g, '\\n> ') + '\\n\\n';
+            markdown += '\\n> ' + htmlToMarkdown(child).replace(/\\n/g, '\\n> ') + '\\n\\n';
             break;
           case 'ul':
           case 'ol':
@@ -272,7 +272,7 @@ const { chromium } = require('playwright');
             const items = child.querySelectorAll(':scope > li');
             items.forEach((li, idx) => {
               const prefix = tag === 'ol' ? (idx + 1) + '. ' : '- ';
-              markdown += prefix + li.textContent.trim() + '\\n';
+              markdown += prefix + htmlToMarkdown(li).trim() + '\\n';
             });
             markdown += '\\n';
             break;
@@ -295,8 +295,12 @@ const { chromium } = require('playwright');
           }
           case 'a': {
             const href = child.href || '#';
-            const text = child.textContent.trim();
-            markdown += '[' + text + '](' + href + ')';
+            const inner = htmlToMarkdown(child).trim();
+            if (/^!\\[.*\\]\\(.*\\)$/.test(inner)) {
+              markdown += inner;
+            } else {
+              markdown += '[' + inner + '](' + href + ')';
+            }
             break;
           }
           case 'hr':
@@ -307,6 +311,9 @@ const { chromium } = require('playwright');
             break;
           case 'section':
           case 'div':
+          case 'span':
+          case 'figure':
+          case 'figcaption':
             markdown += htmlToMarkdown(child);
             break;
           default:
